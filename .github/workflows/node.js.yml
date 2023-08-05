@@ -14,13 +14,16 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
-      - run: |
-          folder=$(ls)
-          if echo $folder | grep -c "projects"
-          then
-            echo "A pasta ja existe!"
-          else
-            mkdir projects
-          fi
-        shell: bash
-
+ 
+          script: |
+            folder=$(ls)
+            if echo $folder | grep -c "test-repo"; 
+            then 
+              echo "Já existe o projeto clonado"; 
+            else 
+              git clone git@github.com:msr-software/test-repo.git;
+              cd test-repo
+              ls
+            fi
+            
+          
