@@ -32,4 +32,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             cd test-repo
-            ls
+            npm install
+            npm run build
+            pm2 start npm --name test-repo -- start
