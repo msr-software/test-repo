@@ -22,8 +22,9 @@ jobs:
               echo "Já existe o projeto clonado"; 
             else 
               git clone git@github.com:msr-software/test-repo.git;
-              cd test-repo
-              ls
+            cd test-repo
+            npm install
+            pm2 start npm --name test-repo -- start
             fi
             
           
