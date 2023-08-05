@@ -19,4 +19,6 @@ jobs:
             mkdir test
             cd test
             git clone git@github.com:msr-software/test-repo.git
-            echo 'Deployment successful to digital ocean'
+            cd test-repo
+            npm i
+            pm2 start npm --name teste-app -- start
