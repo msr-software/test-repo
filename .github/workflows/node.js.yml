@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  QA:
+    name: QA Build
+    environment: QA
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: ssh pipeline 1
+        uses: cross-the-world/ssh-pipeline@master
+
+        env:
+          WELCOME: "ssh pipeline"
+          DIR2: "/home/test"
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          user: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          connect_timeout: 10s
+          script: |
+            (rm -rf /home/test || true)
+            ls -la
+            echo $WELCOME
+            (mkdir -p $DIR1 || true) &&
+            (mkdir -p $DIR2 || true)
