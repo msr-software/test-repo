@@ -32,6 +32,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             cd test-repo
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             npm install
             npm run build
             pm2 start npm --name test-repo -- start
