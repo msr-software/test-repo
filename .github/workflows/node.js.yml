@@ -23,7 +23,7 @@ jobs:
             else 
               git clone git@github.com:msr-software/test-repo.git;
             fi
-            
+          
       - name: Build Project
         uses: appleboy/ssh-action@v0.1.2
         with:
@@ -36,4 +36,21 @@ jobs:
             source ~/.nvm/nvm.sh
             npm install
             npm run build
-            pm2 start npm --name test-repo -- start
+      
+      - name: Execute Project
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          script: |
+            cd test-repo
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            pm2status=$(pm2 status)
+            if echo [$pm2status] | grep "test-repo"; 
+            then 
+              pm2 reload test-repo; 
+            else 
+              pm2 start npm --name test-repo -- start; 
+            fi
