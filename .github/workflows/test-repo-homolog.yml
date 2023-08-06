@@ -35,6 +35,7 @@ jobs:
             cd test-repo
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
+            git checkout release
             git pull
             npm install
             npm run build
