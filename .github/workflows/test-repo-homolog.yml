@@ -2,11 +2,12 @@ name: Build & Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [release]
 
 jobs:
-  clone-app:
+  homolog:
     runs-on: ubuntu-latest
+    environment: homolog
     steps:
       - name: Clone Project
         uses: appleboy/ssh-action@v0.1.2
@@ -14,7 +15,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
- 
+
           script: |
             folder=$(ls)
             if echo $folder | grep -c "test-repo"; 
@@ -23,13 +24,14 @@ jobs:
             else 
               git clone git@github.com:msr-software/test-repo.git;
             fi
-          
+
       - name: Build Project
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASS }}
           script: |
             cd test-repo
             export NVM_DIR=~/.nvm
@@ -37,7 +39,7 @@ jobs:
             git pull
             npm install
             npm run build
-      
+
       - name: Execute Project
         uses: appleboy/ssh-action@v0.1.2
         with:
