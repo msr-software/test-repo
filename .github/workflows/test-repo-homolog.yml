@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: homolog
     steps:
-      - name: Clone Project
+      - name: Clone Project HML
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
-
           script: |
             folder=$(ls)
             if echo $folder | grep -c "test-repo"; 
