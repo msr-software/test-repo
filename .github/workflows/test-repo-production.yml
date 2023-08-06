@@ -30,7 +30,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASS }}
           script: |
             cd test-repo
             export NVM_DIR=~/.nvm
