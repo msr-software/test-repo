@@ -11,7 +11,7 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>
-          Bem vindo a <a href="https://nextjs.org">Maique Application!</a>
+          Alterando o valor de <a href="https://nextjs.org">Maique Application!</a>
         </h1>
 
         <p className={styles.description}>
