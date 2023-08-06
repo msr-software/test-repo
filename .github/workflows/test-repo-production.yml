@@ -1,0 +1,58 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Project
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+
+          script: |
+            folder=$(ls)
+            if echo $folder | grep -c "test-repo"; 
+            then 
+              echo "Já existe o projeto clonado"; 
+            else 
+              git clone git@github.com:msr-software/test-repo.git;
+            fi
+
+      - name: Build Project
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASS }}
+          script: |
+            cd test-repo
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            git pull
+            npm install
+            npm run build
+
+      - name: Execute Project
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          script: |
+            cd test-repo
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            pm2status=$(pm2 status)
+            if echo [$pm2status] | grep "test-repo"; 
+            then 
+              pm2 reload test-repo; 
+            else 
+              pm2 start npm --name test-repo -- start; 
+            fi
